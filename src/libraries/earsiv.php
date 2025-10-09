@@ -6,6 +6,20 @@ use EFINANS\Config\config;
 
 class earsiv extends config
 {
+    /** @var mixed */
+    protected $data;
+
+    /** @var mixed */
+    protected $parametre;
+
+    /** @var mixed */
+    protected $xml;
+
+    /** @var mixed */
+    protected $xmlData;
+
+    /** @var mixed */
+    protected $input;
 
     private $seriNo = "TR";
     private $sube = "MERKEZ";
@@ -143,7 +157,7 @@ class earsiv extends config
 
             $r = $this->api->faturaNoUret($this->parametre);
             $this->return = $r->output;
-        } catch (Exception $e) {
+        } catch (\Exception  $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
         return $this->return;
@@ -174,7 +188,7 @@ class earsiv extends config
 
             $r = $this->api->faturaOlustur($this->parametre);
             $this->return = $r->return;
-        } catch (Exception $e) {
+        } catch (\Exception  $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
         return $this->return;
@@ -195,7 +209,7 @@ class earsiv extends config
 
             $r = $this->api->faturaSorgula($this->parametre);
             $this->return=$r;
-        } catch (Exception $e) {
+        } catch (\Exception  $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
         return $this->return;
@@ -216,7 +230,7 @@ class earsiv extends config
 
             $r = $this->api->faturaIptalEt($this->parametre);
             $this->return=$r->return;
-        } catch (Exception $e) {
+        } catch (\Exception  $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
         return $this->return;

@@ -6,6 +6,21 @@ use EFINANS\Config\config;
 
 class efatura extends config
 {
+    /** @var mixed */
+    protected $parametre;
+
+    /** @var mixed */
+    protected $xml;
+
+    /** @var mixed */
+    protected $xmlData;
+
+    /** @var mixed */
+    protected $input;
+
+    /** @var mixed */
+    protected $belgeNo;
+
     private $data = array();
     private $belgeFormati = "";
 
@@ -87,7 +102,7 @@ class efatura extends config
 
             $r = $this->api->faturaNoUret($this->parametre);
             $this->return = $r->return;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
         return $this->return;
@@ -108,7 +123,7 @@ class efatura extends config
 
             $this->return = $this->api->belgeGonder($this->parametre);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
         return $this->return;
@@ -124,7 +139,7 @@ class efatura extends config
             );
             $r = $this->api->gidenBelgeDurumSorgula($this->parametre);
             $this->return = $r->return;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
         return $this->return;
@@ -142,7 +157,7 @@ class efatura extends config
             );
             $r = $this->api->gidenBelgeleriIndir($this->parametre);
             $this->return = $r;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
         return $this->return;
@@ -160,7 +175,7 @@ class efatura extends config
                 ),
             );
             $r = $this->api->gidenBelgeleriListele($this->parametre);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
         return $r;
@@ -189,7 +204,7 @@ class efatura extends config
                 "belgeTuru" => "FATURA",
             );
             $r = $this->api->gelenBelgeleriListele($this->parametre);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
 
@@ -204,7 +219,7 @@ class efatura extends config
             );
             $r = $this->api->efaturaKullanicisi($this->parametre);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->errors[__FUNCTION__][0] = $e;
         }
 
