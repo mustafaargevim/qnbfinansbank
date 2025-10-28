@@ -248,4 +248,8 @@ class earsiv extends config
         exit;
     }
 
+    public function getErrors($function)
+    {
+        return $this->errors[$function];
+    }
 }

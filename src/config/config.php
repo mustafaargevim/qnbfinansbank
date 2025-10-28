@@ -11,7 +11,7 @@ class config
     protected $vergiTcKimlikNo = "";
 
     protected $context = "";
-    protected $soapOptions = "";
+    protected $soapOptions = array();
     protected $errors = array();
     protected $return = array();
 

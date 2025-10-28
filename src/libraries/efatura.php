@@ -23,6 +23,7 @@ class efatura extends config
 
     private $data = array();
     private $belgeFormati = "";
+    private $erpKodu = "";
 
     public function __construct()
     {
@@ -54,6 +55,15 @@ class efatura extends config
         return $this;
     }
 
+    public function seterpKodu($data)
+    {
+        /*
+         * $bn -> belge noyu set ediyoruz uniq bir id olmalı
+         * */
+        $this->erpKodu = $data;
+
+        return $this;
+    }
 
     public function setData($data = array())
     {
@@ -111,17 +121,18 @@ class efatura extends config
     public function setEFatura()
     {
         try {
-            $this->parametre = array(
-                "vergiTcKimlikNo" => $this->vergiTcKimlikNo,
-                "belgeTuru" => "FATURA_UBL",
-                "belgeNo" => $this->belgeNo,
-                "veri" => $this->xmlData,
-                "belgeHash" => md5($this->xmlData),
-                "mimeType" => "application/xml",
-                "belgeVersiyon" => "3.0",
-            );
-
-            $this->return = $this->api->belgeGonder($this->parametre);
+            $this->return = $this->api->belgeGonderExt([
+            'parametreler' => [
+                'belgeNo' => $this->belgeNo,
+                'vergiTcKimlikNo' => $this->vergiTcKimlikNo,
+                'belgeTuru' => 'FATURA_UBL',
+                'veri' => $this->xmlData,
+                'belgeHash' => md5($this->xmlData),
+                'mimeType' => 'application/xml',
+                'belgeVersiyon' => '3.0',
+                'erpKodu' =>  $this->erpKodu,
+            ]
+        ]);
 
         } catch (\Exception $e) {
             $this->errors[__FUNCTION__][0] = $e;
@@ -168,10 +179,11 @@ class efatura extends config
         try {
             $this->parametre = array(
                 "parametreler" => array(
-                    "baslangicGonderimTarihi" => "20200601",
-                    "bitisGonderimTarihi" => "20200630",
+                    "baslangicGonderimTarihi" => "20251001",
+                    "bitisGonderimTarihi" => "20251030",
                     "belgeTuru" => "FATURA",
                     "vkn" => $this->vergiTcKimlikNo,
+                    'erpKodu' =>  $this->erpKodu,
                 ),
             );
             $r = $this->api->gidenBelgeleriListele($this->parametre);
