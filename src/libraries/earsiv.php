@@ -215,6 +215,23 @@ class earsiv extends config
         return $this->return;
     }
 
+    public function gidenBelgeleriIndir($uuid="")
+    {
+        try {
+            $this->parametre = array(
+                "uuidList" => [$uuid],
+                "belgeFormati" => $this->belgeFormati,
+                "tasinanFaturalar" => 0
+
+            );
+            $r = $this->api->faturaZipiAl($this->parametre);
+            $this->return = $r;
+        } catch (\Exception $e) {
+            $this->errors[__FUNCTION__][0] = $e;
+        }
+        return $this->return;
+    }
+
     public function callFaturaIptalEt()
     {
         try {

@@ -92,7 +92,7 @@ class efatura extends config
 
     private function setDataXml()
     {
-        $element = 'Invoice xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 ../xsdrt/maindoc/UBL-Invoice-2.1.xsd" xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:n4="http://www.altova.com/samplexml/other-namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"';
+        $element = 'Invoice xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 ../xsdrt/maindoc/UBL-Invoice-2.1.xsd" xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"';
         $this->xml = new \EFINANS\Component\xml($element);
 
         $this->setPrefix();
@@ -161,7 +161,7 @@ class efatura extends config
         try {
             $this->parametre = array(
                 "vergiTcKimlikNo" => $this->vergiTcKimlikNo,
-                "belgeOidListesi" => $belgeOid,
+                "belgeOidListesi" => [$belgeOid],
                 "belgeTuru" => "FATURA",
                 "belgeFormati" => $this->belgeFormati,
 
@@ -195,20 +195,6 @@ class efatura extends config
 
     public function gelenBelgeleriListele()
     {
-        /* example response
-         [0] => stdClass Object
-                        (
-                            [belgeNo] => TMA2020000000002
-                            [belgeSiraNo] => 2
-                            [belgeTarihi] => 20200610
-                            [belgeTuru] => FATURA
-                            [ettn] => 4BAF0887-FF0F-4093-9B65-CB6FBE348A72
-                            [gonderenEtiket] => urn:mail:efinansgb@cs.com.tr
-                            [gonderenVknTckn] => 8720616074
-                        )
-
-        */
-
         try {
             $this->parametre = array(
                 "vergiTcKimlikNo" => $this->vergiTcKimlikNo,
@@ -250,9 +236,8 @@ class efatura extends config
         exit;
     }
 
-    public function getErrors()
+    public function getErrors($function)
     {
-        /* çalıştırılan methoddaki hataları döner*/
-        return $this->errors;
+        return $this->errors[$function];
     }
 }
