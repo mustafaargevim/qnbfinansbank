@@ -238,6 +238,6 @@ class efatura extends config
 
     public function getErrors($function)
     {
-        return $this->errors[$function];
+        return $this->errors[$function] ?? [];
     }
 }

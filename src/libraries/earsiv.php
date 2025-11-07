@@ -24,6 +24,7 @@ class earsiv extends config
     private $seriNo = "TR";
     private $sube = "MERKEZ";
     private $kasa = "MERKEZ";
+    private $erpKodu = "";
 
     private $faturaUuid = "";
     private $faturaNo = "";
@@ -82,6 +83,16 @@ class earsiv extends config
          * $data -> e arşiv yapılandırma panel ayarlarından tanımlanır
          * */
         $this->kasa = $data;
+        return $this;
+    }
+
+    public function seterpKodu($data)
+    {
+        /*
+         * $bn -> belge noyu set ediyoruz uniq bir id olmalı
+         * */
+        $this->erpKodu = $data;
+
         return $this;
     }
 
@@ -172,6 +183,7 @@ class earsiv extends config
                 "vkn" => $this->vergiTcKimlikNo,
                 "sube" => $this->sube,
                 "kasa" => $this->kasa,
+                'erpKodu' =>  $this->erpKodu,
             );
 
             if (!$this->data["cbc:ID"]) { /* eğer fatura no gönderilmemişse otomatik üretilmesi için kullanıyoruz */
@@ -253,6 +265,24 @@ class earsiv extends config
         return $this->return;
     }
 
+    public function yapilandirmaAyarlariAl(){
+        try {
+            $this->input = array(
+                "vkn" => $this->vergiTcKimlikNo,
+            );
+
+            $this->parametre = array(
+                "input" => json_encode($this->input),
+            );
+
+            $r = $this->api->yapilandirmaAyarlariAl($this->parametre);
+            $this->return=$r->return;
+        } catch (\Exception  $e) {
+            $this->errors[__FUNCTION__][0] = $e;
+        }
+        return $this->return;
+    }
+
     public function getXmlData()
     {
         return $this->xmlData;
@@ -267,6 +297,6 @@ class earsiv extends config
 
     public function getErrors($function)
     {
-        return $this->errors[$function];
+        return $this->errors[$function] ?? [];
     }
 }
