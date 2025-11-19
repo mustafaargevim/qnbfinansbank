@@ -93,11 +93,12 @@ class efatura extends config
     private function setDataXml()
     {
         $element = 'Invoice xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 ../xsdrt/maindoc/UBL-Invoice-2.1.xsd" xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"';
-        $this->xml = new \EFINANS\Component\xml($element);
+        $this->xml = new \EFINANS\component\xml($element);
 
         $this->setPrefix();
 
         $this->xmlData = $this->xml->setParams($this->data, $this->prefix)->getFaturaSablonXml();
+
         return $this;
     }
 
