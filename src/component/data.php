@@ -351,7 +351,7 @@ class data
         return $this;
     }
 
-    public function setTotals()
+    public function setTotals($veri)
     {
         /*
          * aşağıdaki alanlar bu fonksiyonda otomatik olarak hesaplanır
@@ -363,35 +363,57 @@ class data
         /* toplam satır adedi giriliyor.*/
         $this->data["cbc:LineCountNumeric"] = count($this->data["cac:InvoiceLine"]);
 
-        $vergiler = array();
-        $toplamTutar = $toplamVergiTutari = $toplamMalHizmetTutar = 0;
-        if (count($this->data["cac:InvoiceLine"]) > 0) {
-            foreach ($this->data["cac:InvoiceLine"] as $key => $Satir) {
-                $toplamTutar += $Satir["cbc:LineExtensionAmount"];
-                $toplamMalHizmetTutar += $Satir["cbc:LineExtensionAmount"];
+        // $vergiler = array();
+        // $toplamTutar = $toplamVergiTutari = $toplamMalHizmetTutar = 0;
+        // if (count($this->data["cac:InvoiceLine"]) > 0) {
+        //     foreach ($this->data["cac:InvoiceLine"] as $key => $Satir) {
+        //         $toplamTutar += $Satir["cbc:LineExtensionAmount"];
+        //         $toplamMalHizmetTutar += $Satir["cbc:LineExtensionAmount"];
 
-                if (count($Satir["cac:TaxTotal"]["cac:TaxSubtotal"]) > 0) {
-                    foreach ($Satir["cac:TaxTotal"]["cac:TaxSubtotal"] as $k => $Vergi) {
-                        if (!@$vergiler[@$Vergi["cac:TaxCategory"]["cac:TaxScheme"]["cbc:TaxTypeCode"]]) {
-                            $vergiler[@$Vergi["cac:TaxCategory"]["cac:TaxScheme"]["cbc:TaxTypeCode"]] = $Vergi;
-                        } else {
-                            $vergiler[@$Vergi["cac:TaxCategory"]["cac:TaxScheme"]["cbc:TaxTypeCode"]]["cbc:TaxAmount"] += @$Vergi["cbc:TaxAmount"];
-                        }
-                        $toplamTutar += @$Vergi["cbc:TaxAmount"];
-                        $toplamVergiTutari += @$Vergi["cbc:TaxAmount"];
-                    }
-                }
-            }
-        }
+        //         if (count($Satir["cac:TaxTotal"]["cac:TaxSubtotal"]) > 0) {
+        //             foreach ($Satir["cac:TaxTotal"]["cac:TaxSubtotal"] as $k => $Vergi) {
+        //                 if (!@$vergiler[@$Vergi["cac:TaxCategory"]["cac:TaxScheme"]["cbc:TaxTypeCode"]]) {
+        //                     $vergiler[@$Vergi["cac:TaxCategory"]["cac:TaxScheme"]["cbc:TaxTypeCode"]] = $Vergi;
+        //                 } else {
+        //                     $vergiler[@$Vergi["cac:TaxCategory"]["cac:TaxScheme"]["cbc:TaxTypeCode"]]["cbc:TaxAmount"] += @$Vergi["cbc:TaxAmount"];
+        //                 }
+        //                 $toplamTutar += @$Vergi["cbc:TaxAmount"];
+        //                 $toplamVergiTutari += @$Vergi["cbc:TaxAmount"];
+        //             }
+        //         }
+        //     }
+        // }
 
-        $this->data["cac:TaxTotal"]["cbc:TaxAmount"] = $toplamVergiTutari;
-        $this->data["cac:TaxTotal"]["cac:TaxSubtotal"] = $vergiler;
+        $tax_subtotal=[
+            "0015" => [
+                "cbc:TaxableAmount" => $veri['TaxSubtotal']['TaxableAmount'],
+                "cbc:TaxAmount" => $veri['TaxSubtotal']['TaxAmount'],
+                "cbc:Percent" => $veri['TaxSubtotal']['Percent'],
+                "cac:TaxCategory" => [
+                    "cac:TaxScheme" => [
+                        "cbc:Name" => $veri['TaxSubtotal']['TaxSchemeName'],
+                        "cbc:TaxTypeCode" => $veri['TaxSubtotal']['TaxSchemeTaxTypeCode'],
+                    ]
+                ],
+            ]
+        ];
+
+        $this->data["cac:TaxTotal"]["cbc:TaxAmount"] = $veri['TaxAmount'];
+        $this->data["cac:TaxTotal"]["cac:TaxSubtotal"] = $tax_subtotal;
+
+        // $this->data["cac:LegalMonetaryTotal"] = array(
+        //     "cbc:LineExtensionAmount" => $toplamMalHizmetTutar,
+        //     "cbc:TaxExclusiveAmount" => $toplamTutar - $toplamVergiTutari,
+        //     "cbc:TaxInclusiveAmount" => $toplamTutar,
+        //     "cbc:PayableAmount" => $toplamTutar,
+        // );
 
         $this->data["cac:LegalMonetaryTotal"] = array(
-            "cbc:LineExtensionAmount" => $toplamMalHizmetTutar,
-            "cbc:TaxExclusiveAmount" => $toplamTutar - $toplamVergiTutari,
-            "cbc:TaxInclusiveAmount" => $toplamTutar,
-            "cbc:PayableAmount" => $toplamTutar,
+            "cbc:LineExtensionAmount" => $veri['LineExtensionAmount'],
+            "cbc:TaxExclusiveAmount" => $veri['TaxExclusiveAmount'],
+            "cbc:TaxInclusiveAmount" => $veri['TaxInclusiveAmount'],
+            "cbc:AllowanceTotalAmount" => $veri['AllowanceTotalAmount'],
+            "cbc:PayableAmount" => $veri['PayableAmount'],
         );
 
         return $this;
